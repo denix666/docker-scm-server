@@ -1,0 +1,14 @@
+[Unit]
+Description=scm-server
+After=docker.service
+Requires=docker.service
+
+[Service]
+Restart=on-failure
+ExecStartPre=/usr/bin/install -m777 -d /var/lib/scm
+ExecStartPre=-/usr/bin/docker stop scm-server
+ExecStartPre=-/usr/bin/docker rm scm-server
+ExecStart=/usr/bin/docker run -d -i -t -p 9080:8080 --name scm-server -v /var/lib/scm:/var/lib/scm denix666/scm-server:1.46
+
+[Install]
+WantedBy=multi-user.target
